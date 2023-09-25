@@ -7,7 +7,19 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## RunLaravel Project
+
+Run git clone 'link project github'
+Run composer update or install.
+Run cp .env.example .env or copy .env.example .env.
+Run php artisan key:generate.
+Run php artisan migrate.
+Run php artisan db:seed --class=UserSeeder.
+Run php artisan serve or ser.
+Go to link localhost:8000 OR 127.0.0.1:8000.
+
+
+
 
 
 
