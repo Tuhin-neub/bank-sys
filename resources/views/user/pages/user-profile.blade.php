@@ -2,6 +2,42 @@
 
 @section('header-links')
 <link rel="stylesheet" href="{{ asset('all/user/css/style.css') }}">
+<style>
+.image-upload-section {
+    text-align: center;
+}
+
+.img-fluid.profile-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.custom-file-upload:hover {
+    background-color: #2980b9;
+}
+
+#output {
+    margin-top: 10px;
+    max-width: 100%;
+    height: auto;
+}
+</style>
 @endsection
 
 @section('contents')
@@ -19,10 +55,7 @@
                     @csrf
                     @method('PUT')
                     <div class="row border bg-light">
-                        <div class=" col-md-4 col-lg-4 image-upload-section ">
-                            <p class="font-weight-bold text-center">
-                                <label for="file" style="cursor: pointer; color:black">Upload Image</label>
-                            </p>
+                        <div class="col-md-4 col-lg-4 image-upload-section">
                             <p>
                                 <img class="img-fluid profile-image"
                                     src="{{ !empty($data->user_more_info) ? asset('storage/'.$data->user_more_info->avatar) : asset('all/user/images/profile-icon-png-910.png') }}"
@@ -30,43 +63,28 @@
                             </p>
                             <input type="hidden" name="old_avatar"
                                 value="{{ $data->user_more_info ? $data->user_more_info->avatar : '' }}" />
+                            <label for="imgfile" class="custom-file-upload">Upload Image</label>
                             <input type="file" accept="image/*" name="avatar" id="imgfile" value="{{ old('avatar') }}"
-                                onchange="loadFile(event)" style="width : 100%;color:black">
-
+                                onchange="loadFile(event)" style="display: none;">
                         </div>
+
                         <div class="col-sm-12 col-md-8 col-lg-8">
 
                             <div class="mt-4">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon5">First Name<span
+                                        <span class="input-group-text" id="basic-addon5">Name<span
                                                 class="text-danger">*</span></span>
                                     </div>
-                                    <input type="text" class="form-control" name="first_name" placeholder="First Name"
-                                        aria-label="Username" value="{{ Auth::user()->first_name }}">
+                                    <input type="text" class="form-control" name="name" placeholder="Name"
+                                        aria-label="Username" value="{{ Auth::user()->name }}">
                                 </div>
-                                @error('first_name')
+                                @error('name')
                                 <small class="text-danger mb-2" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </small>
                                 @enderror
                             </div>
-                            <div class="mt-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon5">Last Name<span
-                                                class="text-danger">*</span></span>
-                                    </div>
-                                    <input type="text" class="form-control" name="last_name" placeholder="Last Name"
-                                        aria-label="Username" value="{{ Auth::user()->last_name }}">
-                                </div>
-                                @error('last_name')
-                                <small class="text-danger mb-2" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </small>
-                                @enderror
-                            </div>
-
                             <div class="mt-4">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -82,43 +100,6 @@
                                 </small>
                                 @enderror
                             </div>
-
-                            <div class="mt-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon5">Phone<span
-                                                class="text-danger">*</span></span>
-                                    </div>
-                                    <input type="text" name="phone"
-                                        value="{{ $data->user_more_info ? $data->user_more_info->phone : '' }}"
-                                        class="form-control" aria-label="Contact Number"
-                                        aria-describedby="basic-addon1">
-                                </div>
-                                @error('phone')
-                                <small class="text-danger mb-2" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </small>
-                                @enderror
-                            </div>
-
-                            <div class="mt-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon5">Address<span
-                                                class="text-danger">*</span></span>
-                                    </div>
-                                    <textarea class="form-control" name="address" id="basic-addon1" rows="1"
-                                        cols="1">{{$data->user_more_info ? $data->user_more_info->address : ''}}</textarea>
-                                </div>
-                                @error('address')
-                                <small class="text-danger mb-2" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </small>
-                                @enderror
-                            </div>
-
-
-
                             <div class="p-3 row mb-3 ml-1 d-flex flex-row justify-content-between"
                                 style="float: right;">
                                 <button type="submit" name="submit" class="btn btn-success">Update</button>

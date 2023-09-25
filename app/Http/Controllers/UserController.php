@@ -42,8 +42,7 @@ class UserController extends Controller
         $validated = $request->validate([
             // 'image'=>'required|file|image|dimensions:max_width=300,max_height=250',
             'avatar' => 'nullable',
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'email' => [
                 'required',
                 'string',
@@ -51,13 +50,10 @@ class UserController extends Controller
                 'max:255',
                 Rule::unique('users', 'email')->ignore(Auth::user()->id),
             ],
-            'address' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:255'],
         ]);
 
         $user = User::find(Auth::user()->id);
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
+        $user->name = $request->name;
         $user->email = $request->email;
         $user->save();
 
@@ -91,8 +87,6 @@ class UserController extends Controller
             $user_info->user_id = $user->id;
         }
         $user_info->avatar = $avatar;
-        $user_info->phone = $request->phone;
-        $user_info->address = $request->address;
         $user_info->save();
         if ($user_info) {
             return redirect()
@@ -188,16 +182,48 @@ class UserController extends Controller
 
        
         DB::beginTransaction(); //transaction start
-        $user = User::where('id', Auth::user()->id)->first(); 
-        $user->balance = $user->balance - $request->amount;
-        $user->save();
+        $user = User::where('id', Auth::user()->id)->first();
+        $accountType = Auth::user()->account_type;
+        $amount = $request->amount;
+
         
+        if ($accountType == 1) {
+            $feePercentage = 0.015; 
+        } elseif ($accountType == 2) {
+            $totalWithdrawalAmount = Transaction::where('user_id', Auth::user()->id)->sum('amount');
+
+            if ($totalWithdrawalAmount <= 50000) {
+                $feePercentage = 0.025; 
+            } else {
+                $feePercentage = 0.015; 
+            }
+        } else {
+            $feePercentage = 0; 
+        }
+
+       
+        $isFriday = (date('N') == 5); 
+        $first1000Withdrawals = Transaction::where('user_id', Auth::user()->id)->where('date', 'LIKE', date('Y-m-d') . '%')->count() < 1000;
+        $first5KWithdrawals = Transaction::where('user_id', Auth::user()->id)->where('date', 'LIKE', date('Y-m') . '%')->sum('amount') < 5000;
+
+        if ($isFriday || $first1000Withdrawals || $first5KWithdrawals) {
+            $feePercentage = 0; 
+        }
+
+       
+        $fee = ($feePercentage / 100) * $amount;
+        $user->balance = $user->balance - ($amount + $fee);
+        $user->save();
+
+       
         $data = new Transaction();
-        $data->amount = $request->amount;
+        $data->amount = $amount;
         $data->transaction_type = 2;
-        $data->user_id = Auth::user()->id ;
+        $data->user_id = Auth::user()->id;
         $data->date = date('Y-m-d');
+        $data->fee = $fee; 
         $data->save();
+
         DB::commit(); //transaction end
 
         if ($data) {

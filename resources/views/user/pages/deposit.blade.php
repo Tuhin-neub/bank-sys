@@ -139,7 +139,7 @@
                                 Deposit
                             </td>
                             <td>{{$data->amount}}</td>
-                            <td>{{$data->fee}}</td>
+                            <td>0.00</td>
                             <td>{{date('d M,Y', strtotime($data->date))}}</td>
                         </tr>
                         @endforeach

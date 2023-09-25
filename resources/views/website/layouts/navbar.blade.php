@@ -1,7 +1,7 @@
 <header class="main-header clearfix">
     <div class="main-header__logo">
         <a href="">
-            <img src="{{ asset('all/website/assets/images/resources/logo-janala.png') }}" alt="">
+            <img src="{{ asset('all/website/assets/images/resources/logo-bms.png') }}" alt="">
         </a>
     </div>
     <div class="main-menu-wrapper">
