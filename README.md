@@ -9,24 +9,14 @@
 
 ## RunLaravel Project
 
-Run git clone 'link project github'
-Run composer update or install.
-Run cp .env.example .env or copy .env.example .env.
-Run php artisan key:generate.
-Run php artisan migrate.
-Run php artisan db:seed --class=UserSeeder.
-Run php artisan serve or ser.
-Go to link localhost:8000 OR 127.0.0.1:8000.
+Run git clone 'link project github' <br>
+Run composer update or install.<br>
+Run cp .env.example .env or copy .env.example .env.<br>
+Run php artisan key:generate.<br>
+Run php artisan migrate.<br>
+Run php artisan db:seed --class=UserSeeder.<br>
+Run php artisan serve or ser.<br>
+Go to link localhost:8000 OR 127.0.0.1:8000.<br>
 
 
 
-
-
-
-
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
